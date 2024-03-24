@@ -10,7 +10,7 @@ import { AuthError } from 'next-auth';
 //updating the details of an existing account, deteting an account, and adding an account to the database.
 
 //This code is used as a guide for entered data into the form. Meaning that the retrieved formData must have the following data.
-//It and the 'invalid_type_error' and 'message' serves as validation for the using the safeParse() method. 
+//It and the 'invalid_type_error' and 'message' serves as validation for the using the safeParse() method.
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string({ invalid_type_error: 'Please select a customer.'}),
@@ -120,11 +120,12 @@ export async function deleteInvoice(id: string) {
   }
 }
 
-export async function authenticate( prevState: string | undefined,formData: FormData,)
+export async function authenticate( prevState: string | undefined, formData: FormData)
 {
-  try 
+  try
   {
     await signIn('credentials', formData);
+    //Sending the email and password to the signIn function of NextAuthJS to authenticate the credentials
   }
   catch (error) 
   {
