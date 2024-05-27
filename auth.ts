@@ -1,4 +1,4 @@
-import Credentials from 'next-auth/providers/credentials';
+import Credentials from 'next-auth/providers/credentials'; //for custom login
 import type { User } from '@/app/lib/definitions';
 import { authConfig } from './auth.config';
 import { sql } from '@vercel/postgres';
@@ -8,7 +8,7 @@ import { z } from 'zod';
  
 async function getUser(email: string): Promise<User | undefined> {
   try {
-    const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;//jerome@gmail.com
+    const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
     return user.rows[0];//Since it returns an array of object, the return statement should be an accessing-array.
   } 
   catch (error)
@@ -22,15 +22,18 @@ export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
+      //This authorize() method will be responsible for handling the authentication logic. Meaning that if the user enters the correct credentials the it will return
+        //the retrieved user object from the database or it will return null. If the authentication is successful then the callback function from the customized authentication++
+        //located from the auth.config.ts will be called and redirect the user to the dashboard page of the web application.
       async authorize(credentials) 
       {
         //validating the credentials using the safeParse function from Zod library before processing the authentication.
         const parsedCredentials = z.object({ email: z.string().email(), password: z.string().min(6) }).safeParse(credentials);
- 
+        console.log('executing "authorize()" method from auth.ts to validate and authenticate the entered credentials. ');
         if (parsedCredentials.success)
         {
           const { email, password } = parsedCredentials.data;
-          const user = await getUser(email); //{email: 'jerome@example.com', password: '123'}
+          const user = await getUser(email);
 
           if (!user) return null; //If the user is not existing
 

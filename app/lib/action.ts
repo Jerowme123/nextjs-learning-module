@@ -1,10 +1,10 @@
 'use server';
-import { z } from 'zod';
-import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { signIn } from '@/auth';
+import { sql } from '@vercel/postgres';
 import { AuthError } from 'next-auth';
+import { signIn } from '@/auth';
+import { z } from 'zod';
 
 //This action.ts consists of actions that are not related to data fetching in database. But it is somehow related to database by++
 //updating the details of an existing account, deteting an account, and adding an account to the database.
@@ -124,8 +124,11 @@ export async function authenticate( prevState: string | undefined, formData: For
 {
   try
   {
+    console.log('LOGIN FORM')
     await signIn('credentials', formData);
     //Sending the email and password to the signIn function of NextAuthJS to authenticate the credentials
+    // redirect('/dashboard');
+  
   }
   catch (error) 
   {

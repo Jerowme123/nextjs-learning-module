@@ -186,3 +186,17 @@ module.exports = {
   invoices,
   revenue,
 };
+
+
+/*
+const users=[];
+const customers=[];
+const invoices=[];
+const revenue=[];
+module.exports = {
+  users,
+  customers,
+  invoices,
+  revenue,
+};
+*/
